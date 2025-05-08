@@ -1,0 +1,234 @@
+<?php
+$notif = "";
+
+
+if (isset($_GET['status'])) {
+    if ($_GET['status'] == 'sukses') {
+        $notif = "Pesan berhasil dikirim!";
+    } elseif ($_GET['status'] == 'gagal') {
+        $notif = "Terjadi kesalahan saat mengirim pesan.";
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "portofolio_db";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        header("Location: ?status=gagal");
+        exit();
+    } else {
+        $nama = $conn->real_escape_string($_POST['nama']);
+        $email = $conn->real_escape_string($_POST['email']);
+        $phone = $conn->real_escape_string($_POST['phone']);
+        $pesan = $conn->real_escape_string($_POST['pesan']);
+
+        $sql = "INSERT INTO kontak (nama, email, phone, pesan) VALUES ('$nama', '$email', '$phone', '$pesan')";
+
+        if ($conn->query($sql) === TRUE) {
+            header("Location: ?status=sukses");
+            exit();
+        } else {
+            header("Location: ?status=gagal");
+            exit();
+        }
+
+        $conn->close();
+    }
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Website Guna</title>
+    <link rel="stylesheet" href="style.css">
+    <?php if ($notif !== ""): ?>
+    <script>
+        alert("<?= $notif ?>");
+    </script>
+    <?php endif; ?>
+</head>
+<body>
+    
+    <header class="navbar">
+        <div class="logo">
+          <a href="#">GUNA</a>
+        </div>
+    
+        <nav class="nav-list">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#keahlian">Keahlian</a></li>
+            <li><a href="#testimoni">Testimoni</a></li>
+            <li><a href="#portofolio">Portofolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+    
+        <!-- Hamburger button -->
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+          <div></div>
+          <div></div>
+          <div></div>
+        </button>
+    
+        <!-- Mobile menu -->
+        <nav id="mobile-menu" class="mobile-menu" aria-hidden="true">
+          <ul>
+            <li><a href="#" tabindex="-1">Home</a></li>
+            <li><a href="#about" tabindex="-1">About</a></li>
+            <li><a href="#keahlian" tabindex="-1">Keahlian</a></li>
+            <li><a href="#testimoni" tabindex="-1">Testimoni</a></li>
+            <li><a href="#portofolio" tabindex="-1">Portofolio</a></li>
+            <li><a href="#contact" tabindex="-1">Contact</a></li>
+          </ul>
+        </nav>
+      </header>     
+
+    <main>
+      <section class="content" id="content">
+          <div class="isi-content">
+              <h1 class="title"><span>Hello</span>, It's me <br> Guna Pandu Prilana</h1>
+              <p>
+                Seorang biasa yang memiliki minat dalam membangun aplikasi web 
+                yang efisien dan user-friendly, serta selalu bersemangat untuk 
+                mempelajari teknologi terbaru seperti HTML, CSS, Javascript, 
+                dan lainnya.
+              </p>
+              <div class="button-container">
+                  <a href="#about" class="btn solid">About me</a>
+                  <a href="#portofolio" class="btn outline">Portofolio</a>
+              </div>
+          </div>
+          
+          <aside class="image">
+              <img src="image/poto1.jpg" loading="lazy">
+          </aside>
+      </section>
+
+      <section class="about" id="about">
+        <div class="about-container">
+            <img src="image/poto2.png" class="about-image" loading="lazy">
+            <div class="about-content">
+                <h2 class="about-title"><span>About</span> me</h2>
+                <p class="about-text">
+                    Seorang Web Developer dengan pengalaman 20 tahun di UI/UX dan front-end development. 
+                    Spesialisasi saya meliputi HTML, CSS, JavaScript (React, Vue), serta optimasi performa 
+                    dan pengalaman pengguna untuk website yang responsif dan efisien.
+                </p>
+                <div class="button-container">
+                    <a href="#contact" class="btn outline">Contact me</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="keahlian" id="keahlian">
+        <h1 class="judul-keahlian">Keahlian</h1>
+        <div class="skill-container">
+            <div class="skill-card">
+                <img src="image/html.png" alt="HTML Logo" loading="lazy">
+                <h3>HTML</h3>
+                <div class="progress-bar">
+                    <div class="progress html"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="image/css.png" alt="CSS Logo" loading="lazy">
+                <h3>CSS</h3>
+                <div class="progress-bar">
+                    <div class="progress css"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="image/js.png" alt="JavaScript Logo" loading="lazy">
+                <h3>JavaScript</h3>
+                <div class="progress-bar">
+                    <div class="progress js"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimoni" class="testimoni">
+      <h2 class="judul-testimoni">Testimoni</h2>
+      <div class="isi-testimoni">
+          <article class="testimoni-item">
+              <p>“Desain yang sangat profesional dan responsif. 
+                Sangat senang bekerja dengan Anda!”</p>
+              <h4>~ Budi,XYZ Agency</h4>
+          </article>
+          <article class="testimoni-item">
+              <p>“Cepat tanggap dan kreatif! Sangat merekomendasikan untuk proyek desain.”</p>
+              <h4>~ Siti, Startup ABC</h4>
+          </article>
+          <article class="testimoni-item">
+              <p>“Hasil desain yang sangat sesuai dengan ekspektasi saya. Kualitas terbaik!”</p>
+              <h4>~ Andy, Freelance Client</h4>
+          </article>
+      </div>
+    </section>
+
+    <section class="portofolio" id="portofolio">
+        <h2 class="portofolio-title">Portofolio</h2>
+        <div class="portofolio-container">
+            <div class="portofolio-item">
+                <img src="image/wanderplace.jpg" alt="Wanderplace" loading="lazy">
+                <h3>WANDERPLACE</h3>
+            </div>
+            <div class="portofolio-item">
+                <img src="image/cosmo.jpg" alt="Cosmo Game" loading="lazy">
+                <h3>Cosmo Game</h3>
+            </div>
+            <div class="portofolio-item">
+                <img src="image/ecoin.jpg" alt="E-COINS" loading="lazy">
+                <h3>E-COINS</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="contact-container">
+            <div class="contact-image">
+                <img src="image/poto3.png" loading="lazy">
+            </div>
+            <div class="contact-form">
+                <h2 class="contact-title"><span>Contact</span> me</h2>
+                <form method="post">
+                    <input type="text" name="nama" placeholder="Nama" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="phone" placeholder="Nomor Handphone" required>
+                    <textarea name="pesan" placeholder="Pesan" required></textarea>
+                    <button type="submit">Kirim</button>
+                </form>                                
+            </div>
+        </div>
+    </section>    
+
+  </main>
+
+  <footer class="footer">
+    <nav class="footer-menu">
+        <a href="#">Home</a>
+        <a href="#about">About</a>
+        <a href="#keahlian">Keahlian</a>
+        <a href="#portofolio">Portofolio</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <p class="footer-text">© 2025 Guna Pandu Prilana. All rights reserved</p>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
